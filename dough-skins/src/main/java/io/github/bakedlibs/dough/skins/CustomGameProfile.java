@@ -42,7 +42,7 @@ final class CustomGameProfile extends GameProfile {
         // Forces SkullMeta to properly deserialize and serialize the profile
         // setOwnerProfile was added in 1.18, but setOwningPlayer throws a NullPointerException since 1.20.2
         if (MinecraftVersion.get().isAtLeast(MinecraftVersion.parse("1.20"))) {
-            meta.setOwnerProfile(Bukkit.createPlayerProfile(meta.getOwningPlayer().getUniqueId(), PLAYER_NAME));
+            meta.setOwnerProfile(Bukkit.createPlayerProfile(meta.getOwningPlayer().getUniqueId(), meta.getOwningPlayer().getName()));
         } else {
             meta.setOwningPlayer(meta.getOwningPlayer());
         }

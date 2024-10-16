@@ -207,9 +207,11 @@ public final class ItemUtils {
      * @param replaceConsumables
      *            Whether Consumable Items should be replaced with their "empty" version, see
      *            {@link ItemUtils#consumeItem(ItemStack, int, boolean)}
+     *
+     * @return The consumed Item, if possible. otherwise null.
      */
-    public static void consumeItem(@Nonnull ItemStack item, boolean replaceConsumables) {
-        consumeItem(item, 1, replaceConsumables);
+    public static ItemStack consumeItem(@Nonnull ItemStack item, boolean replaceConsumables) {
+        return consumeItem(item, 1, replaceConsumables);
     }
 
     /**
@@ -231,23 +233,24 @@ public final class ItemUtils {
      *            How many Items should be removed
      * @param replaceConsumables
      *            Whether Items should be replaced with their "empty" version
+     *
+     * @return The consumed Item, if possible. otherwise null.
      */
-    public static void consumeItem(@Nonnull ItemStack item, int amount, boolean replaceConsumables) {
+    public static ItemStack consumeItem(@Nonnull ItemStack item, int amount, boolean replaceConsumables) {
+        ItemStack resultingItem = null;
         if (item.getType() != Material.AIR && item.getAmount() > 0) {
             if (replaceConsumables) {
                 switch (item.getType()) {
                     case POTION:
                     case DRAGON_BREATH:
                     case HONEY_BOTTLE:
-                        item.setType(Material.GLASS_BOTTLE);
-                        item.setAmount(1);
-                        return;
+                        resultingItem = new ItemStack(Material.GLASS_BOTTLE, Math.min(item.getAmount(), amount));
+                        break;
                     case WATER_BUCKET:
                     case LAVA_BUCKET:
                     case MILK_BUCKET:
-                        item.setType(Material.BUCKET);
-                        item.setAmount(1);
-                        return;
+                        resultingItem = new ItemStack(Material.BUCKET, Math.min(item.getAmount(), amount));
+                        break;
                     default:
                         break;
                 }
@@ -259,6 +262,7 @@ public final class ItemUtils {
                 item.setAmount(item.getAmount() - amount);
             }
         }
+        return resultingItem;
     }
 
 }
